@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: treasure-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: treasure@hunt
+      MYSQL_DATABASE: treasure_hunt
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - treasure-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: ./treasure-server
+      dockerfile: Dockerfile
+      args:
+        MAVEN_MIRROR_URL: https://maven.aliyun.com/repository/public
+    container_name: treasure-server
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/treasure_hunt?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: treasure@hunt
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - treasure-network
+
+  admin:
+    build:
+      context: ./treasure-admin
+      dockerfile: Dockerfile
+      args:
+        NPM_REGISTRY: https://registry.npmmirror.com/
+    container_name: treasure-admin
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      API_URL: http://server:8080
+    depends_on:
+      - server
+    networks:
+      - treasure-network
+
+networks:
+  treasure-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local 
