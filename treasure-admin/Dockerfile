@@ -3,6 +3,14 @@ FROM node:18-alpine as build
 # 设置工作目录
 WORKDIR /app
 
+# 安装sharp所需的系统依赖
+RUN apk add --no-cache python3 make g++ vips-dev
+
+# 配置npm使用淘宝镜像
+RUN npm config set registry https://registry.npmmirror.com \
+    && npm config set sharp_binary_host https://npmmirror.com/mirrors/sharp \
+    && npm config set sharp_libvips_binary_host https://npmmirror.com/mirrors/sharp-libvips
+
 # 复制package.json和package-lock.json
 COPY package*.json ./
 
