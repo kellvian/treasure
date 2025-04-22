@@ -10,8 +10,7 @@ WORKDIR /app
 # 配置npm使用镜像源和网络参数
 RUN npm config set registry $NPM_REGISTRY && \
     npm config set fetch-timeout 600000 && \
-    npm config set fetch-retries 3 && \
-    npm config set network-timeout 600000
+    npm config set fetch-retries 3
 
 # 复制 package.json 和 package-lock.json
 COPY package*.json ./
