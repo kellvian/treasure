@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.treasure.server.mapper.TreasureRecordMapper">
+
+    <!-- 获取每日收集统计 -->
+    <select id="getDailyCollectionStats" resultType="java.util.Map">
+        SELECT
+            DATE(find_time) as collect_date,
+            COUNT(*) as count
+        FROM
+            treasure_record
+        WHERE
+            find_time BETWEEN #{start} AND #{end}
+        GROUP BY
+            DATE(find_time)
+        ORDER BY
+            DATE(find_time)
+    </select>
+    
+    <!-- 获取每周收集统计 -->
+    <select id="getWeeklyCollectionStats" resultType="java.util.Map">
+        SELECT
+            DATE_FORMAT(find_time, '%Y-%u') as collect_week,
+            MIN(find_time) as collect_date,
+            COUNT(*) as count
+        FROM
+            treasure_record
+        WHERE
+            find_time BETWEEN #{start} AND #{end}
+        GROUP BY
+            DATE_FORMAT(find_time, '%Y-%u')
+        ORDER BY
+            collect_week
+    </select>
+    
+    <!-- 获取每月收集统计 -->
+    <select id="getMonthlyCollectionStats" resultType="java.util.Map">
+        SELECT
+            DATE_FORMAT(find_time, '%Y-%m') as collect_month,
+            MIN(find_time) as collect_date,
+            COUNT(*) as count
+        FROM
+            treasure_record
+        WHERE
+            find_time BETWEEN #{start} AND #{end}
+        GROUP BY
+            DATE_FORMAT(find_time, '%Y-%m')
+        ORDER BY
+            collect_month
+    </select>
+    
+    <!-- 获取用户排行榜（只包含普通用户，不包含管理员） -->
+    <select id="getUserRankingList" resultType="java.util.Map">
+        SELECT
+            u.id,
+            u.username,
+            u.nickname,
+            u.avatar,
+            COUNT(tr.id) as treasureCount,
+            SUM(t.points) as totalPoints
+        FROM
+            user u
+        LEFT JOIN
+            treasure_record tr ON u.id = tr.user_id
+        LEFT JOIN
+            treasure t ON tr.treasure_id = t.id
+        WHERE
+            u.role = 'user'
+        GROUP BY
+            u.id
+        ORDER BY
+            totalPoints DESC, treasureCount DESC
+        LIMIT #{limit}
+    </select>
+</mapper> 

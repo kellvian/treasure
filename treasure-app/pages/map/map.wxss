@@ -1,0 +1,337 @@
+.map-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+map {
+  width: 100%;
+  height: 100%;
+}
+
+/* 加载提示 */
+.loading-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.loading {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20rpx 40rpx;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+  color: #333;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.2);
+}
+
+/* 宝藏卡片 */
+.treasure-card {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 30rpx;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+  max-height: 60vh;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 90;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15rpx;
+}
+
+.treasure-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  flex: 1;
+}
+
+.treasure-status {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.status-success {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status-warning {
+  background-color: #FFC107;
+  color: #333;
+}
+
+.treasure-desc {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+  line-height: 1.5;
+}
+
+.treasure-distance {
+  font-size: 30rpx;
+  margin-bottom: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.distance-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #FF5722;
+}
+
+.points-value {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+/* 按钮区域 */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.nav-btn, .treasure-btn {
+  border-radius: 10rpx;
+  font-size: 32rpx;
+  padding: 18rpx 0;
+  margin: 0;
+}
+
+.nav-btn.primary {
+  background-color: #2196F3;
+  color: white;
+}
+
+.nav-btn.secondary {
+  background-color: #607D8B;
+  color: white;
+}
+
+.nav-btn.warning {
+  background-color: #F44336;
+  color: white;
+}
+
+.treasure-btn {
+  margin-top: 10rpx;
+}
+
+.treasure-btn.active {
+  background-color: #FF9800;
+  color: white;
+  font-weight: bold;
+}
+
+.treasure-btn.disabled {
+  background-color: #E0E0E0;
+  color: #757575;
+}
+
+/* 位置控制按钮组 */
+.map-controls {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.control-btn {
+  width: 80rpx;
+  height: 80rpx;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.control-icon {
+  font-size: 40rpx;
+}
+
+/* 位置刷新按钮样式已包含在控制按钮组中 */
+.refresh-location {
+  background-color: #fff;
+}
+
+.locate-me {
+  background-color: #2196F3;
+  color: #fff;
+}
+
+/* 添加坐标信息显示样式 */
+.coordinate-info {
+  position: absolute;
+  top: 20rpx;
+  left: 20rpx;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10rpx 20rpx;
+  border-radius: 10rpx;
+  font-size: 22rpx;
+  color: #333;
+  z-index: 75;
+  max-width: 70%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.map-source {
+  margin-top: 5rpx;
+  font-size: 20rpx;
+  color: #999;
+}
+
+/* 高德地图logo */
+.amap-logo {
+  position: absolute;
+  bottom: 10rpx;
+  left: 10rpx;
+  z-index: 75;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5rpx;
+  border-radius: 5rpx;
+}
+
+.amap-logo image {
+  width: 120rpx;
+  height: 40rpx;
+}
+
+/* 调试信息面板 */
+.debug-info {
+  position: absolute;
+  bottom: 70px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 12px;
+  max-width: 80%;
+  z-index: 100;
+}
+
+.debug-section {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.debug-title {
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.debug-value {
+  word-break: break-all;
+}
+
+/* 位置获取引导页面 */
+.loading-guide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  z-index: 200;
+}
+
+.guide-content {
+  background-color: white;
+  border-radius: 20rpx;
+  padding: 60rpx 40rpx;
+  width: 80%;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.guide-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+.guide-desc {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 40rpx;
+  line-height: 1.5;
+}
+
+.guide-btn {
+  background-color: #FF9800;
+  color: white;
+  padding: 20rpx 60rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  border: none;
+  margin-top: 20rpx;
+}
+
+/* 收藏按钮样式 */
+.favorite-btn {
+  font-size: 28rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 8rpx;
+  background-color: #f0f0f0;
+  color: #666;
+  border: 1px solid #ddd;
+  margin-top: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn.favorited {
+  background-color: #FFC107; 
+  color: #fff;
+  border: 1px solid #FFA000;
+}
+
+.favorite-btn::before {
+  content: "★";
+  margin-right: 6rpx;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20rpx;
+} 

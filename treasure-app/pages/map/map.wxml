@@ -1,0 +1,129 @@
+<view class="map-container">
+  <!-- 只有当位置数据存在时才渲染地图组件 -->
+  <block wx:if="{{latitude && longitude}}">
+    <map 
+      id="map"
+      longitude="{{longitude}}"
+      latitude="{{latitude}}"
+      scale="{{scale}}"
+      markers="{{markers}}"
+      polyline="{{polyline}}"
+      show-location="true"
+      enable-rotate="{{mapSetting.enableRotate}}"
+      enable-overlooking="{{mapSetting.enableOverlooking}}"
+      enable-zoom="{{mapSetting.enableZoom}}"
+      show-compass="{{mapSetting.showCompass}}"
+      enable-3D="{{mapSetting.enable3D}}"
+      show-scale="{{mapSetting.showScale}}"
+      setting="{{mapSetting}}"
+      bindmarkertap="onMarkerTap"
+      bindupdated="onMapUpdated"
+      binderror="onMapError"
+    ></map>
+    
+    <view class="amap-logo">
+      <image src="../../images/amap-logo.svg" mode="aspectFit"></image>
+    </view>
+  </block>
+  
+  <!-- 当位置数据不存在时显示位置获取引导 -->
+  <view class="loading-guide" wx:if="{{!latitude || !longitude}}">
+    <view class="guide-content">
+      <text class="guide-title">需要获取位置信息</text>
+      <text class="guide-desc">请允许获取您的位置信息，以便查找附近的宝藏</text>
+      <button class="guide-btn" bindtap="getUserLocation">获取位置</button>
+    </view>
+  </view>
+  
+  <!-- 点击标题激活调试模式 -->
+  <view class="coordinate-info" wx:if="{{latitude && longitude}}" bindtap="handleTitleClick">
+    <text>当前位置: {{latitude && latitude.toFixed(5)}}, {{longitude && longitude.toFixed(5)}} (GCJ-02)</text>
+    <text class="map-source">高德地图服务</text>
+  </view>
+  
+  <!-- 调试信息 -->
+  <view class="debug-info" wx:if="{{isDebugMode}}">
+    <view class="debug-section">
+      <text class="debug-title">调试模式</text>
+      <text class="debug-value">已激活</text>
+    </view>
+    <view class="debug-section" wx:if="{{selectedTreasure}}">
+      <text class="debug-title">宝藏坐标: </text>
+      <text class="debug-value">{{selectedTreasure.latitude}}, {{selectedTreasure.longitude}}</text>
+    </view>
+    <view class="debug-section">
+      <text class="debug-title">距离计算: </text>
+      <text class="debug-value">{{distance}}米</text>
+    </view>
+  </view>
+  
+  <view class="loading-mask" wx:if="{{loadingTreasures && latitude && longitude}}">
+    <view class="loading">
+      <text>宝藏加载中</text>
+    </view>
+  </view>
+  
+  <view class="loading-mask" wx:if="{{loadingLocation && !loadingTreasures}}">
+    <view class="loading">
+      <text>位置获取中</text>
+    </view>
+  </view>
+  
+  <!-- 位置控制按钮组 -->
+  <view class="map-controls" wx:if="{{latitude && longitude}}">
+    <!-- 刷新地图按钮 -->
+    <view class="control-btn refresh-map" bindtap="handleRefresh">
+      <text class="control-icon">🔄</text>
+    </view>
+    
+    <!-- 刷新位置按钮 -->
+    <view class="control-btn refresh-location" bindtap="getUserLocation">
+      <text class="control-icon">📍</text>
+    </view>
+    
+    <!-- 定位到我的位置按钮 -->
+    <view class="control-btn locate-me" bindtap="moveToUserLocation">
+      <text class="control-icon">🎯</text>
+    </view>
+  </view>
+  
+  <view class="treasure-card" wx:if="{{selectedTreasure}}">
+    <view class="card-header">
+      <text class="treasure-name">{{selectedTreasure.name}}</text>
+      <text class="treasure-status {{canCollect ? 'status-success' : 'status-warning'}}">
+        {{canCollect ? '可以领取' : '未到达'}}
+      </text>
+    </view>
+    
+    <view class="treasure-desc">{{selectedTreasure.description}}</view>
+    
+    <view class="treasure-distance">
+      <text>距离: <text class="distance-value">{{distance}}</text> 米</text>
+      <text class="points-value">奖励积分: {{selectedTreasure.points}}</text>
+    </view>
+    
+    <view class="action-buttons">
+      <block wx:if="{{!isNavigating}}">
+        <button class="nav-btn primary" bindtap="startNavigation">开始导航</button>
+      </block>
+      
+      <block wx:else>
+        <button class="nav-btn warning" bindtap="stopNavigation">结束导航</button>
+      </block>
+      
+      <button 
+        class="treasure-btn {{canCollect ? 'active' : 'disabled'}}" 
+        bindtap="collectTreasure" 
+        disabled="{{!canCollect}}">
+        {{canCollect ? '领取宝藏' : '距离太远，无法领取'}}
+      </button>
+      
+      <!-- 添加收藏按钮 -->
+      <button 
+        class="favorite-btn {{isFavorite ? 'favorited' : ''}}" 
+        bindtap="toggleFavorite">
+        {{isFavorite ? '已收藏' : '收藏'}}
+      </button>
+    </view>
+  </view>
+</view> 

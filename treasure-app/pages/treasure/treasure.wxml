@@ -1,0 +1,25 @@
+<view class="treasure-container">
+  <view class="header">
+    <text class="title">寻宝排行榜</text>
+  </view>
+  
+  <view class="empty-tip" wx:if="{{rankingList.length === 0}}">
+    <text>暂无排行数据</text>
+  </view>
+  
+  <view class="ranking-list" wx:else>
+    <view class="ranking-item {{index < 3 ? 'top-ranking' : ''}}" wx:for="{{rankingList}}" wx:key="id" 
+          bindtap="viewUserDetail" data-id="{{item.id}}">
+      <view class="avatar-container">
+        <image class="user-avatar" src="{{index === 0 ? '../../images/rank1.png' : index === 1 ? '../../images/rank2.png' : index === 2 ? '../../images/rank3.png' : '../../images/default-avatar.svg'}}"></image>
+      </view>
+      <view class="user-info">
+        <view class="user-name">{{item.nickname || item.username}}</view>
+        <view class="find-stats">
+          <text>找到宝藏: {{item.treasureCount}}</text>
+          <text class="points">{{item.totalPoints || 0}} 积分</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

@@ -1,0 +1,24 @@
+{
+  "name": "treasure-admin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "echarts": "^5.6.0",
+    "element-plus": "^2.4.0",
+    "pinia": "^2.1.0",
+    "vue": "^3.3.0",
+    "vue-router": "^4.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.4.0",
+    "sass": "^1.69.0",
+    "svg-to-ico": "^1.0.15",
+    "vite": "^4.5.0"
+  }
+}

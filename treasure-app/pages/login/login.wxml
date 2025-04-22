@@ -1,0 +1,14 @@
+<view class="login-container">
+  <view class="logo-container">
+    <image class="logo" src="../../images/logo.svg"></image>
+    <text class="title">寻宝小程序</text>
+  </view>
+  
+  <view class="description">
+    <text>欢迎使用寻宝小程序，探索周围的宝藏并获得奖励！</text>
+  </view>
+  
+  <view class="wechat-login">
+    <button class="wechat-btn" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">微信一键登录</button>
+  </view>
+</view> 
