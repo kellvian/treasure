@@ -3,14 +3,10 @@ FROM node:18-alpine as build
 # 设置工作目录
 WORKDIR /app
 
-# 配置npm使用淘宝镜像
-RUN npm config set registry https://registry.npmmirror.com
-
 # 复制package.json和package-lock.json
 COPY package*.json ./
 
-# 安装依赖
-RUN npm install
+# 跳过npm install步骤，使用挂载的node_modules
 
 # 复制源代码
 COPY . .
