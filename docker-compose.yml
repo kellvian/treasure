@@ -49,7 +49,7 @@ services:
     ports:
       - "80:80"
     networks:
-      - app_network
+      - treasure-network
 
 networks:
   treasure-network:
