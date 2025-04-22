@@ -44,18 +44,12 @@ services:
     build:
       context: ./treasure-admin
       dockerfile: Dockerfile
-      args:
-        NPM_REGISTRY: https://registry.npmmirror.com/
-    container_name: treasure-admin
+    container_name: admin
     restart: always
     ports:
       - "80:80"
-    environment:
-      API_URL: http://server:8080
-    depends_on:
-      - server
     networks:
-      - treasure-network
+      - app_network
 
 networks:
   treasure-network:
