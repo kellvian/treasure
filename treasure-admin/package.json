@@ -18,7 +18,6 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
     "sass": "^1.69.0",
-    "svg-to-ico": "^1.0.15",
     "vite": "^4.5.0"
   }
 }
