@@ -3,6 +3,9 @@ FROM node:18-alpine as build
 # 设置工作目录
 WORKDIR /app
 
+# 安装Python和构建必要工具
+RUN apk add --no-cache python3 make g++ build-base
+
 # 配置npm使用淘宝镜像
 RUN npm config set registry https://registry.npmmirror.com
 
