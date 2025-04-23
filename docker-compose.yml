@@ -50,6 +50,8 @@ services:
       - "80:80"
     networks:
       - treasure-network
+    volumes:
+      - admin-node-modules:/app/node_modules
 
 networks:
   treasure-network:
@@ -57,4 +59,6 @@ networks:
 
 volumes:
   mysql-data:
+    driver: local
+  admin-node-modules:
     driver: local 
