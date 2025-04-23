@@ -3,10 +3,18 @@ FROM node:18-alpine as build
 # 设置工作目录
 WORKDIR /app
 
+# 配置npm使用淘宝镜像
+RUN npm config set registry https://registry.npmmirror.com
+
+# 清理npm缓存
+RUN npm cache clean --force
+
 # 复制package.json和package-lock.json
 COPY package*.json ./
 
-# 跳过npm install步骤，使用挂载的node_modules
+# 安装依赖，确保安装vite
+RUN npm install
+RUN npm install -g vite
 
 # 复制源代码
 COPY . .

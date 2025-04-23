@@ -11,7 +11,6 @@
     </div>
     <div class="background-decoration">
       <div class="treasure-map">
-        <img src="@/assets/map.png" alt="宝藏地图" class="map-image" />
         <div class="x-mark">X</div>
       </div>
     </div>
@@ -98,13 +97,6 @@ const goBack = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.map-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  opacity: 0.5;
 }
 
 .x-mark {
