@@ -25,14 +25,21 @@ RUN npm run build
 # 使用nginx作为生产服务器
 FROM nginx:stable-alpine
 
+# 创建存放SSL证书的目录
+RUN mkdir -p /etc/nginx/ssl
+
+# 复制SSL证书
+COPY imboss.com.cn.key /etc/nginx/ssl/
+COPY imboss.com.cn_bundle.crt /etc/nginx/ssl/
+
 # 将构建结果复制到nginx目录
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # 复制nginx配置文件
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# 暴露80端口
-EXPOSE 80
+# 暴露80和443端口
+EXPOSE 80 443
 
 # 启动nginx
 CMD ["nginx", "-g", "daemon off;"]
