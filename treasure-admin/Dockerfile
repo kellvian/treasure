@@ -38,6 +38,9 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # 复制nginx配置文件
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# 添加这一行来修复权限问题
+RUN chmod -R 755 /usr/share/nginx/html && \
+    chown -R nginx:nginx /usr/share/nginx/html
 # 暴露80和443端口
 EXPOSE 80 443
 
