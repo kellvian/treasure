@@ -2,7 +2,7 @@ const app = getApp();
 const AMapWX = require('../../utils/amap-wx.130.js').AMapWX;
 const coordTransform = require('../../utils/coord-transform.js');
 let amapInst;
-
+let maxDistance = 5
 
 Page({
   data: {
@@ -675,7 +675,7 @@ Page({
     );
     
     // 判断是否可以领取（距离小于50米）
-    const canCollect = distance <= 50;
+    const canCollect = distance <= maxDistance;
     
     console.log('最终距离计算结果:', distance, '米, 可领取:', canCollect);
     
@@ -1078,7 +1078,7 @@ Page({
           // 使用高德返回的距离更新应用内距离
           if (path.distance) {
             const distance = parseInt(path.distance);
-            const canCollect = distance <= 50; // 50米内可以领取
+            const canCollect = distance <= maxDistance; // 50米内可以领取
             console.log('高德路线规划返回的距离:', distance, '米');
             
             this.setData({
@@ -1220,7 +1220,7 @@ Page({
   collectTreasure: function () {
     const { selectedTreasure, distance } = this.data;
     
-    if (distance <= 50) {  // 距离小于50米，考虑到GPS定位误差
+    if (distance <= maxDistance) {  // 距离小于50米，考虑到GPS定位误差
       wx.showLoading({ title: '正在验证...' });
       
       app.request({

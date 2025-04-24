@@ -29,8 +29,8 @@ FROM nginx:stable-alpine
 RUN mkdir -p /etc/nginx/ssl
 
 # 复制SSL证书
-COPY imboss.com.cn.key /etc/nginx/ssl/
-COPY imboss.com.cn_bundle.crt /etc/nginx/ssl/
+COPY ../nginx-proxy/ssl/imboss.com.cn.key /etc/nginx/ssl/
+COPY ../nginx-proxy/ssl/imboss.com.cn_bundle.crt /etc/nginx/ssl/
 
 # 将构建结果复制到nginx目录
 COPY --from=build /app/dist /usr/share/nginx/html
