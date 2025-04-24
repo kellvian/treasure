@@ -30,6 +30,6 @@ jwt:
   secret: treasure_hunt_super_secure_jwt_secret_key_32bytes
   expiration: 86400000  # 24小时的有效期
   
-wx:
-  appId: wx681c45ade53bcf7b
-  appSecret: xxxxxx
+wechat:
+  appid: wx681c45ade53bcf7b
+  secret: 91fbe4f950c509baf9bc1f248bf48e9

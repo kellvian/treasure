@@ -8,8 +8,13 @@ import com.treasure.server.entity.User;
 import com.treasure.server.mapper.UserMapper;
 import com.treasure.server.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -17,6 +22,15 @@ import java.util.Map;
 @Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Value("${wechat.appid}")
+    private String appid;
+    
+    @Value("${wechat.secret}")
+    private String secret;
+    
+    // 微信登录获取openid的URL
+    private static final String WX_LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session";
 
     @Override
     public User login(String username, String password) {
@@ -48,8 +62,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User wxLogin(String code, Object userInfo) {
-        // 获取openid
-        String openid = "mock_openid"; // 实际项目中需要调用微信接口获取openid
+        // 通过微信接口获取openid
+        String openid = getWxOpenId(code);
+        if (StrUtil.isBlank(openid)) {
+            throw new RuntimeException("获取微信用户openid失败");
+        }
         
         // 通过openid查询用户
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -79,6 +96,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         
         return user;
+    }
+    
+    /**
+     * 调用微信接口获取openid
+     * @param code 微信授权码
+     * @return openid
+     */
+    private String getWxOpenId(String code) {
+        try {
+            String url = WX_LOGIN_URL + "?appid=" + appid + "&secret=" + secret + "&js_code=" + code + "&grant_type=authorization_code";
+            
+            // 使用HttpClient或RestTemplate发送请求
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            
+            // 解析返回的JSON
+            JSONObject jsonObject = JSON.parseObject(response.getBody());
+            log.info("微信登录返回: {}", jsonObject);
+            
+            if (jsonObject.containsKey("openid")) {
+                return jsonObject.getString("openid");
+            } else {
+                log.error("获取微信openid失败: {}", jsonObject.getString("errmsg"));
+                return null;
+            }
+        } catch (Exception e) {
+            log.error("调用微信接口异常", e);
+            return null;
+        }
     }
 
     @Override
